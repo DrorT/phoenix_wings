@@ -33,6 +33,8 @@ class PhoenixSocket {
 
   int timeout = 10000;
   PhoenixSocketOptions _options = new PhoenixSocketOptions();
+  Function? _optionsProvider;
+  String _endpointString;
   PhoenixConnectionProvider _connectionProvider = PhoenixIoConnection.provider;
 
   /// Creates an instance of PhoenixSocket
@@ -40,7 +42,8 @@ class PhoenixSocket {
   /// endpoint is the full url to which you wish to connect e.g. `ws://localhost:4000/websocket/socket`
   PhoenixSocket(String endpoint,
       {socketOptions: PhoenixSocketOptions,
-      connectionProvider: PhoenixConnectionProvider}) {
+      connectionProvider: PhoenixConnectionProvider,
+      optionsProvider: Function}) {
     if (socketOptions is PhoenixSocketOptions) {
       _options = socketOptions;
     }
@@ -49,6 +52,9 @@ class PhoenixSocket {
       _connectionProvider = connectionProvider;
     }
 
+    _optionsProvider = optionsProvider;
+
+    _endpointString = endpoint;
     _buildEndpoint(endpoint);
   }
 
@@ -94,6 +100,10 @@ class PhoenixSocket {
 
     for (int tries = 0; _conn == null && _connecting; tries += 1) {
       try {
+        if (_optionsProvider != null) {
+          _options = await _optionsProvider!();
+          _buildEndpoint(_endpointString);
+        }
         _conn = _connectionProvider(_endpoint.toString());
         await _conn.waitForConnection();
       } catch (reason) {
