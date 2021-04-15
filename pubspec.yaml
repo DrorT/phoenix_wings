@@ -1,6 +1,6 @@
 name: phoenix_wings
 description: Phoenix Channel client for Dart
-version: 0.2.2
+version: 0.2.2+1
 author: mfeckie<mfeckie@gmail.com>
 homepage: https://github.com/mfeckie/phoenix_wings
 
@@ -12,4 +12,4 @@ dev_dependencies:
   intl: "^0.16.0"
 
 environment:
-  sdk: '>=2.2.0 <3.0.0'
+  sdk: ">=2.2.0 <3.0.0"
