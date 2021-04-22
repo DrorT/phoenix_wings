@@ -111,6 +111,8 @@ class PhoenixSocket {
         print(
             "WebSocket connection to ${_endpoint.toString()} failed!: $reason");
 
+        _onConnectionError(reason);
+
         var wait = reconnectAfterMs[min(tries, reconnectAfterMs.length - 1)];
         await new Future.delayed(new Duration(milliseconds: wait));
 
